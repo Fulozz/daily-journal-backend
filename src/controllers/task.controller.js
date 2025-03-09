@@ -3,11 +3,11 @@ const Task = require('../models/task.model')
 
 exports.createTask = async (req, res) => {
     try {
-        const { title, description, status, dueDate } = req.body;
+        const { title, description, completed, dueDate } = req.body;
         const task = new Task({
             title,
             description,
-            status,
+            completed,
             dueDate,
             user: req.userData._id
         });
