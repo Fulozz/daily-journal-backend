@@ -7,7 +7,7 @@ const cors = require('cors')
 const app = express()
 
 // => Conexão com o banco de dados
-const mongooseConnection = require('./configuration/mongooseConection.config');
+const mongooseConnection = require('./configuration/mongooseConnection.config');
 
 
 // => importe de rotas API
