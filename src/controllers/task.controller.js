@@ -3,12 +3,12 @@ const Task = require('../models/task.model')
 
 exports.createTask = async (req, res) => {
     try {
-        const { title, description, status, data, userId } = req.body;
+        const { title, description, status, dueDate } = req.body;
         const task = new Task({
             title,
             description,
             status,
-            data,
+            dueDate,
             user: req.userData._id
         });
         await task.save();
@@ -42,7 +42,7 @@ exports.returnTaskById = async (req, res) => {
 exports.updateTask = async (req, res) => {
     try {
         const { taskId } = req.params;
-        const { title, description, status, data } = req.body;
+        const { title, description, status, data, completed } = req.body;
         const task = await Task.findOne({ _id: taskId, user: req.userData._id });
         if (!task) {
             return res.status(404).json({ message: 'Task not found!' });
@@ -51,6 +51,7 @@ exports.updateTask = async (req, res) => {
         task.description = description;
         task.status = status;
         task.data = data;
+        task.completed = completed
         await task.save();
         res.status(200).json({ message: 'Task updated successfully!', task });
     } catch (error) {

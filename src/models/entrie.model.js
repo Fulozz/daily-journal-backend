@@ -8,7 +8,7 @@ dotenv.config();
 const Schema = mongoose.Schema;
 
 const entrieSchema = new Schema({
-    description: { type: String, maxLenght: 50, required: true},
+    description: { type: String, required: true},
     title: { type: String, required: true},
     data: { type: Object, required: true},
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'}
