@@ -3,7 +3,7 @@ const router = express.Router();
 
 const auth  = require('../middleware/auth.middleware')
 
-const tasksController = require('../controllers/tasks.controller')
+const tasksController = require('../controllers/task.controller')
 
 // ==> Rota responsavel por criar uma nova 'Task': (POST) localhost:3000/api/v1/tasks
 router.post('/tasks', auth, tasksController.createTask);

@@ -2,7 +2,7 @@ const Task = require('../models/task.model')
 const jwt = require('jsonwebtoken')
 
 
-exports.createTast = async (req, res) => {
+exports.createTask = async (req, res) => {
     try {
         const { title, description, status, data, userId } = req.body;
         const task = new Task({
