@@ -10,9 +10,8 @@ const Schema = mongoose.Schema;
 
 const taskSchema = new Schema({
     title: { type: String, maxLenght: 50, required: true},
-    description: { type: String, maxLenght: 30, required: true},
+    description: { type: String, required: true},
     status: { type: String, required: true},
-    data: { type: Object, required: true},
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 },{
     timestamps: true,
