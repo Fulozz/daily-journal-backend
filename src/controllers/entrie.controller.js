@@ -6,7 +6,6 @@ exports.createEntrie = async (req, res) => {
         const entrie = new Entrie({
             title,
             description,
-            data,
             user: userId
         });
         await entrie.save();
