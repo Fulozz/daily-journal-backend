@@ -42,16 +42,15 @@ exports.returnTaskById = async (req, res) => {
 exports.updateTask = async (req, res) => {
     try {
         const { taskId } = req.params;
-        const { title, description, status, data, completed } = req.body;
+        const { title, description, completed, data } = req.body;
         const task = await Task.findOne({ _id: taskId, user: req.userData._id });
         if (!task) {
             return res.status(404).json({ message: 'Task not found!' });
         }
         task.title = title;
         task.description = description;
-        task.status = status;
+        task.completed = completed;
         task.data = data;
-        task.completed = completed
         await task.save();
         res.status(200).json({ message: 'Task updated successfully!', task });
     } catch (error) {

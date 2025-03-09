@@ -2,7 +2,7 @@ const Entrie = require('../models/entrie.model')
 
 exports.createEntrie = async (req, res) => {
     try {
-        const { title, description, data, userId } = req.body;
+        const { title, description, userId } = req.body;
         const entrie = new Entrie({
             title,
             description,
