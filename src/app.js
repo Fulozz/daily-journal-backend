@@ -11,9 +11,12 @@ const mongooseConnection = require('./configuration/mongooseConnection.config');
 
 
 // => importe de rotas API
-const index = require('./routes/index')
+const index = require('./routes/a.routes')
 const userRoutes = require('./routes/user.routes')
 const taskRoutes = require('./routes/task.routes')
+const entrieRoutes = require('./routes/entrie.routes')
+
+
 // => configuração do servidor
 
 app.use(express.urlencoded({ extended: true }));
@@ -28,7 +31,7 @@ app.set("mongoose connection", mongooseConnection);
 app.use(index)
 app.use('/api/v1', userRoutes)
 app.use('/api/v1', taskRoutes)
-
+app.use('/api/v1', entrieRoutes)
 
 
 module.exports = app
