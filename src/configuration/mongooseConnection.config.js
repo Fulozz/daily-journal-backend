@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // importar o arquivo de configuração
-const database = require('./db.config');
+const database = require('./database.config');
 
 mongoose.Promise = global.Promise;
 
