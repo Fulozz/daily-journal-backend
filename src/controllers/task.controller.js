@@ -9,7 +9,7 @@ exports.createTask = async (req, res) => {
             description,
             completed,
             dueDate,
-            user: req.userData._id
+            user: req.userId
         });
         await task.save();
         res.status(201).json({ message: 'Task created successfully!', task });
