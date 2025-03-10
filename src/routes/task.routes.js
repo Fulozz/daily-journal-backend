@@ -15,6 +15,6 @@ router.get('/tasks', auth, tasksController.returnAllTasks);
 router.get('/tasks/:taskId', auth, tasksController.returnTaskById);
 
 // ==> Rota responsavel por atualizar uma 'Task' pelo 'Id': (PUT) localhost:3000/api/v1/tasks/:taskId
-router.put('/tasks/:taskId', auth, tasksController.updateTask);
+router.patch('/tasks/:taskId', auth, tasksController.updateTask);
 
 module.exports = router;
