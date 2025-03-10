@@ -10,8 +10,8 @@ const Schema = mongoose.Schema;
 const entrieSchema = new Schema({
     description: { type: String, required: true},
     title: { type: String, required: true},
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'}
-},{
+    userId: { type: String, required: true}
+    },{
     timestamps: true,
     collection: 'entries'
 });
