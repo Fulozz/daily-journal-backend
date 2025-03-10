@@ -3,7 +3,8 @@ const Task = require('../models/task.model')
 
 exports.createTask = async (req, res) => {
     try {
-        const { title, description, completed, dueDate, userId } = req.body;
+        const { title, description, completed, dueDate } = req.body;
+        const userId = req.query.userId;
         if(!title || !description || !dueDate || !userId) {
             return res.status(400).json({ message: 'Title, description, due date and user id are required!' });
         }
