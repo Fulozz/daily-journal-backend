@@ -11,7 +11,8 @@ const taskSchema = new Schema({
     description: { type: String, required: true},
     completed: { type: Boolean, required: true},
     userId: { type: String, required: true},
-    dueDate: { type: Date, required: true}
+    dueDate: { type: Date, required: true},
+    completionDate: { type: Date }
 },{
     timestamps: true,
     collection: 'tasks'
