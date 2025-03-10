@@ -19,7 +19,7 @@ exports.createTask = async (req, res) => {
 }
 
 exports.returnAllTasks = async (req, res) => {
-    const { userId } = req.query.userId;
+    const userId = req.query.userId;
     if(!userId) {
         return res.status(400).json({ message: 'User id is required!' });
     }
