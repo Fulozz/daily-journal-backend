@@ -68,8 +68,7 @@ exports.updateTask = async (req, res) => {
 
 exports.deleteTask = async (req, res) => {
     try {
-        const { taskId } = req.params
-        const { userId } = req.body;
+        const { userId, taskId } = req.body;
         const task = await Task.findOne({ _id: taskId, userId: userId });
         if (!task) {
                     return res.status(404).json({ message: 'Task not found!' });
