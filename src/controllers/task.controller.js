@@ -19,8 +19,12 @@ exports.createTask = async (req, res) => {
 }
 
 exports.returnAllTasks = async (req, res) => {
+    const { userId } = req.body;
+    if(!userId) {
+        return res.status(400).json({ message: 'User id is required!' });
+    }
     try {
-        const tasks = await Task.find({ userId: req.userId });
+        const tasks = await Task.find({ userId: userId });
         res.status(200).json(tasks);
     } catch (error) {
         res.status(400).json({ error: error.message });
