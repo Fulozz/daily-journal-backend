@@ -18,15 +18,16 @@ const entrieRoutes = require('./routes/entrie.routes')
 
 
 // => configuração do servidor
-const corsOptions = {
-    origin: ['http://localhost:3000', 'https://personal-daily-journal.vercel.app/'],
-    optionsSuccessStatus: 200
-}
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.json({ type: 'application/vnd.api+json'}));
-app.use(cors());
-app.options(['http://localhost:3000', 'https://personal-daily-journal.vercel.app/'], cors());
+app.use(cors({
+    origin: ['http://localhost:3000', 'https://personal-daily-journal.vercel.app/'], // Add your frontend URLs
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true // If you're using cookies/credentials
+  }));
 app.use(morgan('dev'));
 
 app.set("mongoose connection", mongooseConnection);
