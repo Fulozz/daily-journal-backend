@@ -3,13 +3,13 @@ const Task = require('../models/task.model')
 
 exports.createTask = async (req, res) => {
     try {
-        const { title, description, completed, dueDate } = req.body;
+        const { title, description, completed, dueDate, userId } = req.body;
         const task = new Task({
             title,
             description,
             completed,
             dueDate,
-            user: req.userId
+            userId: userId
         });
         await task.save();
         res.status(201).json({ message: 'Task created successfully!', task });
@@ -20,7 +20,7 @@ exports.createTask = async (req, res) => {
 
 exports.returnAllTasks = async (req, res) => {
     try {
-        const tasks = await Task.find({ user: req.userId });
+        const tasks = await Task.find({ userId: req.userId });
         res.status(200).json(tasks);
     } catch (error) {
         res.status(400).json({ error: error.message });

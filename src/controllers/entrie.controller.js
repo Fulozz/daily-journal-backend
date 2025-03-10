@@ -6,7 +6,7 @@ exports.createEntrie = async (req, res) => {
         const entrie = new Entrie({
             title,
             description,
-            user: userId
+            userId: userId
         });
         await entrie.save();
         res.status(201).json({ message: 'Entrie created successfully!', entrie });
@@ -26,7 +26,7 @@ exports.returnAllEntries = async (req, res) => {
 exports.returnEntrieById = async (req, res) => {
     try {
         const { entrieId } = req.params;
-        const entrie = await Entrie.findOne({ _id: entrieId, user: req.userId });
+        const entrie = await Entrie.findOne({ _id: entrieId, userId: req.userId });
         if (!entrie) {
             return res.status(404).json({ message: 'Entrie not found!' });
         }
