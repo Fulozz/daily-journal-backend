@@ -23,10 +23,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.json({ type: 'application/vnd.api+json'}));
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://personal-daily-journal.vercel.app/'], // Add your frontend URLs
+    origin: '*', // Add your frontend URLs
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true // If you're using cookies/credentials
   }));
 app.use(morgan('dev'));
 
