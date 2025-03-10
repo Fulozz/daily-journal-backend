@@ -25,7 +25,8 @@ const corsOptions = {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.json({ type: 'application/vnd.api+json'}));
-app.use(cors(corsOptions));
+app.use(cors());
+app.options(['http://localhost:3000', 'https://personal-daily-journal.vercel.app/'], cors());
 app.use(morgan('dev'));
 
 app.set("mongoose connection", mongooseConnection);
