@@ -16,8 +16,12 @@ exports.createEntrie = async (req, res) => {
 }
 
 exports.returnAllEntries = async (req, res) => {
+    const { userId } = req.body;
+    if(!userId) {
+        return res.status(400).json({ message: 'User id is required!' });
+    }
     try {
-        const entries = await Entrie.find({ user:req.userId});
+        const entries = await Entrie.find({ userId: req.userId});
         res.status(200).json(entries);
     } catch (error) {
         res.status(400).json({ error: error.message });
