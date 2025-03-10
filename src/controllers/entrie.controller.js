@@ -16,7 +16,7 @@ exports.createEntrie = async (req, res) => {
 }
 
 exports.returnAllEntries = async (req, res) => {
-    const { userId } = req.params;
+    const { userId } = req.query.userId;
     if(!userId) {
         return res.status(400).json({ message: 'User id is required!' });
     }
