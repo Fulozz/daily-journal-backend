@@ -20,7 +20,7 @@ exports.createTask = async (req, res) => {
 
 exports.returnAllTasks = async (req, res) => {
     try {
-        const tasks = await Task.find({ user: req.userData._id });
+        const tasks = await Task.find({ user: req.userId });
         res.status(200).json(tasks);
     } catch (error) {
         res.status(400).json({ error: error.message });

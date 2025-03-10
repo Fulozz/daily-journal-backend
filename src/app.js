@@ -18,11 +18,14 @@ const entrieRoutes = require('./routes/entrie.routes')
 
 
 // => configuração do servidor
-
+const corsOptions = {
+    origin: ['http://localhost:3000', 'https://personal-daily-journal.vercel.app/'],
+    optionsSuccessStatus: 200
+}
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.json({ type: 'application/vnd.api+json'}));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(morgan('dev'));
 
 app.set("mongoose connection", mongooseConnection);
