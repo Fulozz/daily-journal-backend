@@ -10,7 +10,8 @@ const taskSchema = new Schema({
     title: { type: String, maxLenght: 50, required: true},
     description: { type: String, required: true},
     completed: { type: Boolean, required: true},
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    userId: { type: String, required: true},
+    dueDate: { type: Date, required: true}
 },{
     timestamps: true,
     collection: 'tasks'
