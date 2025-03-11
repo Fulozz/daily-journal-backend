@@ -6,9 +6,9 @@ const Task = require('../models/task.model');
  * @access Privado
  */
 exports.createTask = async (req, res) => {
+    const userId = req.userData.userId;
   try {
     const { title, description, dueDate } = req.body;
-    const userId = req.userData.userId;
 
     // Validação básica
     if (!title) {
@@ -38,8 +38,8 @@ exports.createTask = async (req, res) => {
  * @access Privado
  */
 exports.returnAllTasks = async (req, res) => {
-  try {
     const userId = req.userData.userId;
+  try {
     
     // Opções de filtro
     const filter = { userId };
@@ -88,9 +88,9 @@ exports.returnTaskById = async (req, res) => {
  * @access Privado
  */
 exports.updateTask = async (req, res) => {
+    const userId = req.userData.userId;
   try {
     const { taskId } = req.params;
-    const userId = req.userData.userId;
     const { title, description, dueDate } = req.body;
 
     // Validação básica
@@ -125,9 +125,9 @@ exports.updateTask = async (req, res) => {
  * @access Privado
  */
 exports.toggleTaskCompletion = async (req, res) => {
+    const userId = req.userData.userId;
   try {
     const { taskId } = req.params;
-    const userId = req.userData.userId;
     
     // Busca a tarefa
     const task = await Task.findOne({ _id: taskId, userId });
@@ -167,9 +167,9 @@ exports.toggleTaskCompletion = async (req, res) => {
  * @access Privado
  */
 exports.deleteTask = async (req, res) => {
+    const userId = req.userData.userId;
   try {
     const { taskId } = req.params;
-    const userId = req.userData.userId;
 
     const deletedTask = await Task.findOneAndDelete({ _id: taskId, userId });
 
