@@ -101,7 +101,7 @@ exports.deleteTask = async (req, res) => {
 exports.toggleTaskCompletion = async (req, res) => {
     try {
         // Obter o ID da tarefa dos parâmetros da URL
-        const { taskId } = req.params.taskId;
+        const { taskId } = req.params;
         
         // Obter o ID do usuário do token JWT (recomendado)
         const userId = req.userData.userId;
