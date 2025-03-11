@@ -49,8 +49,11 @@ exports.returnTaskById = async (req, res) => {
 }
 
 exports.updateTask = async (req, res) => {
+    const userId = req.userData._id;
+    if(!userId) {
+        return res.status(400).json({ message: 'User id is required' });
+    }
     try {
-        const userId = req.userData._id;
         const { title, description, completed, data, taskId} = req.body;
         const task = await Task.findOne({ _id: taskId, userId: userId });
         if (!task) {
