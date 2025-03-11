@@ -8,7 +8,7 @@ const Schema = mongoose.Schema;
 
 const taskSchema = new Schema({
     title: { type: String, maxLenght: 50, required: true},
-    description: { type: String, required: true},
+    content: { type: String, required: true},
     completed: { type: Boolean, required: true},
     userId: { type: String, required: true},
     dueDate: { type: Date, required: true},

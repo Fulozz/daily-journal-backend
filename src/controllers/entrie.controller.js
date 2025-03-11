@@ -2,10 +2,10 @@ const Entrie = require('../models/entrie.model')
 
 exports.createEntrie = async (req, res) => {
     try {
-        const { title, description, userId } = req.body;
+        const { title, content, userId } = req.body;
         const entrie = new Entrie({
             title,
-            description,
+            content,
             userId: userId
         });
         await entrie.save();
@@ -43,13 +43,13 @@ exports.returnEntrieById = async (req, res) => {
 exports.updateEntrie = async (req, res) => {
     try {
         const { entrieId } = req.params;
-        const { title, description, userId } = req.body;
+        const { title, content, userId } = req.body;
         const entrie = await Entrie.findOne({ _id: entrieId, user: req.userId });
         if (!entrie) {
             return res.status(404).json({ message: 'Entrie not found!' });
         }
         entrie.title = title;
-        entrie.description = description;
+        entrie.content = content;
         await entrie.save();
         res.status(200).json({ message: 'Entrie updated successfully!', entrie });
     } catch (error) {
