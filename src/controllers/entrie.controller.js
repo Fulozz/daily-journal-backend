@@ -1,8 +1,12 @@
 const Entrie = require('../models/entrie.model')
 
 exports.createEntrie = async (req, res) => {
+    const userId = req.userData._id;
+    if(!userId) {
+        return res.status(400).json({ message: 'User id is required!' });
+    }
     try {
-        const { title, content, userId } = req.body;
+        const { title, content } = req.body;
         const entrie = new Entrie({
             title,
             content,
@@ -28,9 +32,13 @@ exports.returnAllEntries = async (req, res) => {
     }
 }
 exports.returnEntrieById = async (req, res) => {
+    const userId = req.userData._id;
+    if(!userId) {
+        return res.status(400).json({ message: 'User id is required' });
+    }
     try {
         const { entrieId } = req.params;
-        const entrie = await Entrie.findOne({ _id: entrieId, userId: req.userId });
+        const entrie = await Entrie.findOne({ _id: entrieId, userId: userId });
         if (!entrie) {
             return res.status(404).json({ message: 'Entrie not found!' });
         }
@@ -41,10 +49,14 @@ exports.returnEntrieById = async (req, res) => {
 }
 
 exports.updateEntrie = async (req, res) => {
+    const userId = req.userData._id;
+    if(!userId) {
+        return res.status(400).json({ message: 'User id is required' });
+    }
     try {
         const { entrieId } = req.params;
-        const { title, content, userId } = req.body;
-        const entrie = await Entrie.findOne({ _id: entrieId, user: req.userId });
+        const { title, content } = req.body;
+        const entrie = await Entrie.findOne({ _id: entrieId, userId: userId});
         if (!entrie) {
             return res.status(404).json({ message: 'Entrie not found!' });
         }
