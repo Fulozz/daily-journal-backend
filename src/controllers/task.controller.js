@@ -97,3 +97,44 @@ exports.deleteTask = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 }
+
+exports.toggleTaskStatus = async (req, res) => {
+    try {
+        // Obter o ID da tarefa dos parâmetros da URL
+        const { taskId } = req.params;
+        
+        // Obter o ID do usuário do token JWT (recomendado)
+        const userId = req.userData.userId;
+        
+        // Encontrar a tarefa
+        const task = await Task.findOne({ _id: taskId, userId: userId });
+        
+        if (!task) {
+            return res.status(404).json({ message: 'Task not found!' });
+        }
+        
+        // Inverter o status de conclusão
+        const newCompletedStatus = !task.completed;
+        
+        // Atualizar a data de conclusão
+        const completionDate = newCompletedStatus ? new Date() : null;
+        
+        // Atualizar a tarefa
+        const updatedTask = await Task.findOneAndUpdate(
+            { _id: taskId, userId: userId },
+            { 
+                completed: newCompletedStatus,
+                completionDate: completionDate
+            },
+            { new: true } // Retorna o documento atualizado
+        );
+        
+        return res.status(200).json({ 
+            message: 'Task status updated successfully!', 
+            task: updatedTask 
+        });
+    }
+    catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
