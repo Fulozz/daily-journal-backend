@@ -25,7 +25,7 @@ app.use(express.json({ type: 'application/vnd.api+json'}));
 app.use(cors({
     origin: '*', // Add your frontend URLs
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: '*',
   }));
 app.use(morgan('dev'));
 
