@@ -98,7 +98,7 @@ exports.deleteTask = async (req, res) => {
     }
 }
 
-exports.toggleTaskStatus = async (req, res) => {
+exports.toggleTaskCompletion = async (req, res) => {
     try {
         // Obter o ID da tarefa dos parâmetros da URL
         const { taskId } = req.params;
