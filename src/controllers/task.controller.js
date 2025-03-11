@@ -5,8 +5,14 @@ exports.createTask = async (req, res) => {
     try {
         const { title, description, completed, dueDate } = req.body;
         const userId = req.query.userId;
-        if(!title || !description || !dueDate || !userId) {
-            return res.status(400).json({ message: 'Title, description, due date and user id are required!' });
+        const missingFields = [];
+        if (!title) missingFields.push('Title');
+        if (!description) missingFields.push('Description');
+        if (!dueDate) missingFields.push('Due date');
+        if (!userId) missingFields.push('User id');
+
+        if (missingFields.length > 0) {
+            return res.status(400).json({ message: `Missing fields: ${missingFields.join(', ')}` });
         }
         const task = new Task({
             title,
