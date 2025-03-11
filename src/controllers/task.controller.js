@@ -13,7 +13,7 @@ exports.createTask = async (req, res) => {
             description,
             completed,
             dueDate,
-            userId: userId
+            userId: req.userData._id
         });
         await task.save();
         res.status(201).json({ message: 'Task created successfully!', task });
@@ -23,12 +23,12 @@ exports.createTask = async (req, res) => {
 }
 
 exports.returnAllTasks = async (req, res) => {
-    const userId = req.query.userId;
+    const userId = req.userData._id;
     if(!userId) {
         return res.status(400).json({ message: 'User id is required!' });
     }
     try {
-        const tasks = await Task.find({ userId: userId });
+        const tasks = await Task.find({ userId: req.userData._id });
         res.status(200).json(tasks);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -49,8 +49,8 @@ exports.returnTaskById = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
     try {
-        const { title, description, completed, data, userId, taskId} = req.body;
-        const task = await Task.findOne({ _id: taskId, userId: userId });
+        const { title, description, completed, data, taskId} = req.body;
+        const task = await Task.findOne({ _id: taskId, userId: req.userData._id });
         if (!task) {
             return res.status(404).json({ message: 'Task not found!' });
         }
@@ -68,7 +68,7 @@ exports.updateTask = async (req, res) => {
 exports.deleteTask = async (req, res) => {
     try {
         const taskId = req.params.taskId;
-        const task = await Task.findOne({ _id: taskId, userId: userId });
+        const task = await Task.findOne({ _id: taskId, userId: req.userData._id });
         if (!task) {
                     return res.status(404).json({ message: 'Task not found!' });
                 }
