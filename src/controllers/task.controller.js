@@ -13,7 +13,7 @@ exports.createTask = async (req, res) => {
             description,
             completed,
             dueDate,
-            userId: req.userData._id
+            userId: userId
         });
         await task.save();
         res.status(201).json({ message: 'Task created successfully!', task });
@@ -28,7 +28,7 @@ exports.returnAllTasks = async (req, res) => {
         return res.status(400).json({ message: 'User id is required!' });
     }
     try {
-        const tasks = await Task.find({ userId: req.userData._id });
+        const tasks = await Task.find({ userId: userId});
         res.status(200).json(tasks);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -36,6 +36,7 @@ exports.returnAllTasks = async (req, res) => {
 }   
 exports.returnTaskById = async (req, res) => {
     try {
+        const userId = req.userData._id;
         const { taskId } = req.params;
         const task = await Task.findOne({ _id: taskId, user: req.userData._id });
         if (!task) {
@@ -49,8 +50,9 @@ exports.returnTaskById = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
     try {
+        const userId = req.userData._id;
         const { title, description, completed, data, taskId} = req.body;
-        const task = await Task.findOne({ _id: taskId, userId: req.userData._id });
+        const task = await Task.findOne({ _id: taskId, userId: userId });
         if (!task) {
             return res.status(404).json({ message: 'Task not found!' });
         }
@@ -67,12 +69,13 @@ exports.updateTask = async (req, res) => {
 
 exports.deleteTask = async (req, res) => {
     try {
+        const userId = req.userData._id;
         const taskId = req.params.taskId;
-        const task = await Task.findOne({ _id: taskId, userId: req.userData._id });
+        const task = await Task.findOne({ _id: taskId, userId: userId });
         if (!task) {
                     return res.status(404).json({ message: 'Task not found!' });
                 }
-        const taskDelete = await Task.findOneAndDelete({ _id: taskId, userId: req.userData._id});
+        const taskDelete = await Task.findOneAndDelete({ _id: taskId, userId: userId});
         
         if(taskDelete){
             return res.status(200).json({ message: 'Task deleted successfully!', task });
