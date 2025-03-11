@@ -1,140 +1,184 @@
-const Task = require('../models/task.model')
+const Task = require('../models/task.model');
 
-
+/**
+ * Cria uma nova tarefa
+ * @route POST /api/v1/tasks
+ * @access Privado
+ */
 exports.createTask = async (req, res) => {
-    const userId = req.userData._id;
-    if(!userId) {
-        return res.status(400).json({ message: 'User id is required!' });
-    }
-    try {
-        const { title, description, completed, dueDate } = req.body;
-        const missingFields = [];
-        if (!title) missingFields.push('Title');
-        if (!description) missingFields.push('Description');
-        if (!dueDate) missingFields.push('Due date');
-        if (!userId) missingFields.push('User id');
+  try {
+    const { title, description, dueDate } = req.body;
+    const userId = req.userData.userId;
 
-        if (missingFields.length > 0) {
-            return res.status(400).json({ message: `Missing fields: ${missingFields.join(', ')}` });
-        }
-        const task = new Task({
-            title,
-            description,
-            completed,
-            dueDate,
-            userId: userId
-        });
-        await task.save();
-        res.status(201).json({ message: 'Task created successfully!', task });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
+    // Validação básica
+    if (!title) {
+      return res.status(400).json({ message: 'O título da tarefa é obrigatório' });
     }
-}
 
+    // Cria a nova tarefa
+    const newTask = new Task({
+      title,
+      description,
+      dueDate: dueDate || null,
+      userId
+    });
+
+    // Salva a tarefa no banco de dados
+    const savedTask = await newTask.save();
+
+    res.status(201).json(savedTask);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao criar tarefa', error: error.message });
+  }
+};
+
+/**
+ * Retorna todas as tarefas do usuário
+ * @route GET /api/v1/tasks
+ * @access Privado
+ */
 exports.returnAllTasks = async (req, res) => {
-    const userId = req.userData._id;
-    if(!userId) {
-        return res.status(400).json({ message: 'User id is required!' });
+  try {
+    const userId = req.userData.userId;
+    
+    // Opções de filtro
+    const filter = { userId };
+    
+    // Verifica se há filtros na query string
+    if (req.query.completed === 'true') {
+      filter.completed = true;
+    } else if (req.query.completed === 'false') {
+      filter.completed = false;
     }
-    try {
-        const tasks = await Task.find({ userId: userId});
-        res.status(200).json(tasks);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-}   
+
+    // Busca as tarefas com os filtros aplicados
+    const tasks = await Task.find(filter).sort({ createdAt: -1 });
+    
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar tarefas', error: error.message });
+  }
+};
+
+/**
+ * Retorna uma tarefa específica pelo ID
+ * @route GET /api/v1/tasks/:taskId
+ * @access Privado
+ */
 exports.returnTaskById = async (req, res) => {
-    try {
-        const userId = req.userData._id;
-        const { taskId } = req.params;
-        const task = await Task.findOne({ _id: taskId, user: req.userData._id });
-        if (!task) {
-            return res.status(404).json({ message: 'Task not found!' });
-        }
-        res.status(200).json(task);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-}
+  try {
+    const { taskId } = req.params;
+    const userId = req.userData.userId;
 
+    const task = await Task.findOne({ _id: taskId, userId });
+
+    if (!task) {
+      return res.status(404).json({ message: 'Tarefa não encontrada' });
+    }
+
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar tarefa', error: error.message });
+  }
+};
+
+/**
+ * Atualiza uma tarefa pelo ID
+ * @route PUT /api/v1/tasks/:taskId
+ * @access Privado
+ */
 exports.updateTask = async (req, res) => {
-    const userId = req.userData._id;
-    if(!userId) {
-        return res.status(400).json({ message: 'User id is required' });
-    }
-    try {
-        const { title, description, completed, data, taskId} = req.body;
-        const task = await Task.findOne({ _id: taskId, userId: userId });
-        if (!task) {
-            return res.status(404).json({ message: 'Task not found!' });
-        }
-        task.title = title;
-        task.description = description;
-        task.completed = completed;
-        task.data = data;
-        await task.save();
-        res.status(200).json({ message: 'Task updated successfully!', task });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-}
+  try {
+    const { taskId } = req.params;
+    const userId = req.userData.userId;
+    const { title, description, dueDate } = req.body;
 
-exports.deleteTask = async (req, res) => {
-    try {
-        const userId = req.userData._id;
-        const taskId = req.params.taskId;
-        const task = await Task.findOne({ _id: taskId, userId: userId });
-        if (!task) {
-                    return res.status(404).json({ message: 'Task not found!' });
-                }
-        const taskDelete = await Task.findOneAndDelete({ _id: taskId, userId: userId});
-        
-        if(taskDelete){
-            return res.status(200).json({ message: 'Task deleted successfully!', task });
-        }
+    // Validação básica
+    if (!title) {
+      return res.status(400).json({ message: 'O título da tarefa é obrigatório' });
     }
-    catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-}
 
+    // Busca e atualiza a tarefa
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: taskId, userId },
+      { 
+        title, 
+        description, 
+        dueDate: dueDate || null 
+      },
+      { new: true } // Retorna o documento atualizado
+    );
+
+    if (!updatedTask) {
+      return res.status(404).json({ message: 'Tarefa não encontrada' });
+    }
+
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao atualizar tarefa', error: error.message });
+  }
+};
+
+/**
+ * Alterna o status de conclusão de uma tarefa
+ * @route PATCH /api/v1/tasks/:taskId/toggle
+ * @access Privado
+ */
 exports.toggleTaskCompletion = async (req, res) => {
-    try {
-        // Obter o ID da tarefa dos parâmetros da URL
-        const { taskId } = req.params;
-        
-        // Obter o ID do usuário do token JWT (recomendado)
-        const userId = req.userData.userId;
-        
-        // Encontrar a tarefa
-        const task = await Task.findOne({ _id: taskId, userId: userId });
-        
-        if (!task) {
-            return res.status(404).json({ message: 'Task not found!' });
-        }
-        
-        // Inverter o status de conclusão
-        const newCompletedStatus = !task.completed;
-        
-        // Atualizar a data de conclusão
-        const completionDate = newCompletedStatus ? new Date() : null;
-        
-        // Atualizar a tarefa
-        const updatedTask = await Task.findOneAndUpdate(
-            { _id: taskId, userId: userId },
-            { 
-                completed: newCompletedStatus,
-                completionDate: completionDate
-            },
-            { new: true } // Retorna o documento atualizado
-        );
-        
-        return res.status(200).json({ 
-            message: 'Task status updated successfully!', 
-            task: updatedTask 
-        });
+  try {
+    const { taskId } = req.params;
+    const userId = req.userData.userId;
+    
+    // Busca a tarefa
+    const task = await Task.findOne({ _id: taskId, userId });
+    
+    if (!task) {
+      return res.status(404).json({ message: 'Tarefa não encontrada' });
     }
-    catch (error) {
-        res.status(400).json({ error: error.message });
+    
+    // Inverte o status de conclusão
+    const newCompletedStatus = !task.completed;
+    
+    // Define ou limpa a data de conclusão
+    const completionDate = newCompletedStatus ? new Date() : null;
+    
+    // Atualiza a tarefa
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: taskId, userId },
+      { 
+        completed: newCompletedStatus,
+        completionDate
+      },
+      { new: true }
+    );
+    
+    res.status(200).json({ 
+      message: 'Status da tarefa atualizado com sucesso', 
+      task: updatedTask 
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao alternar status da tarefa', error: error.message });
+  }
+};
+
+/**
+ * Exclui uma tarefa pelo ID
+ * @route DELETE /api/v1/tasks/:taskId
+ * @access Privado
+ */
+exports.deleteTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const userId = req.userData.userId;
+
+    const deletedTask = await Task.findOneAndDelete({ _id: taskId, userId });
+
+    if (!deletedTask) {
+      return res.status(404).json({ message: 'Tarefa não encontrada' });
     }
+
+    res.status(200).json({ message: 'Tarefa excluída com sucesso' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao excluir tarefa', error: error.message });
+  }
 };

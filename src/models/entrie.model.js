@@ -1,23 +1,30 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-
-dotenv.config();
-
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const entrieSchema = new Schema({
-    content: { type: String, required: true},
-    title: { type: String, required: true},
-    userId: { type: String, required: true}
-    },{
-    timestamps: true,
-    collection: 'entries'
+const entrySchema = new Schema({
+  title: {
+    type: String,
+    required: [true, 'O título da entrada é obrigatório'],
+    trim: true,
+    maxlength: [100, 'O título não pode ter mais de 100 caracteres']
+  },
+  content: {
+    type: String,
+    required: [true, 'O conteúdo da entrada é obrigatório'],
+    trim: true
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'O ID do usuário é obrigatório']
+  }
+}, {
+  timestamps: true,
+  versionKey: false
 });
 
+// Índices para melhorar a performance das consultas
+entrySchema.index({ userId: 1 });
+entrySchema.index({ createdAt: -1 });
 
-
-const Entrie = mongoose.model('Entrie', entrieSchema);
-
-module.exports = Entrie;
+module.exports = mongoose.model('Entry', entrySchema);
