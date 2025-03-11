@@ -1,21 +1,41 @@
 const express = require('express');
 const router = express.Router();
-const entriesController = require('../controllers/entrie.controller')
-const auth  = require('../middleware/auth.middleware')
+const entryController = require('../controllers/entry.controller');
+const auth = require('../middleware/auth.middleware');
 
-// ==> Rota responsavel por criar uma nova 'Entrie': (POST) localhost:3000/api/v1/entries
-router.post('/entries', auth, entriesController.createEntrie);
+/**
+ * @route POST /api/v1/entries
+ * @desc Cria uma nova entrada de diário
+ * @access Privado
+ */
+router.post('/entries', auth, entryController.createEntry);
 
-// ==> Rota responsavel por listar todas as 'Entries': (GET) localhost:3000/api/v1/entries
-router.get('/entries', auth, entriesController.returnAllEntries);
+/**
+ * @route GET /api/v1/entries
+ * @desc Retorna todas as entradas do usuário
+ * @access Privado
+ */
+router.get('/entries', auth, entryController.returnAllEntries);
 
-// ==> Rota responsavel por listar uma 'Entrie' pelo 'Id': (GET) localhost:3000/api/v1/entries/:entrieId
-router.get('/entries/:entrieId', auth, entriesController.returnEntrieById);
+/**
+ * @route GET /api/v1/entries/:entryId
+ * @desc Retorna uma entrada específica pelo ID
+ * @access Privado
+ */
+router.get('/entries/:entryId', auth, entryController.returnEntryById);
 
-// ==> Rota responsavel por atualizar uma 'Entrie' pelo 'Id': (PUT) localhost:3000/api/v1/entries/:entrieId
-router.put('/entries/:entrieId', auth, entriesController.updateEntrie);
+/**
+ * @route PUT /api/v1/entries/:entryId
+ * @desc Atualiza uma entrada pelo ID
+ * @access Privado
+ */
+router.put('/entries/:entryId', auth, entryController.updateEntry);
 
-// ==> Rota responsavel por deletar uma 'Entrie' pelo 'Id': (DELETE) localhost:3000/api/v1/entries/:entrieId
-router.delete('/entries/:entrieId', auth, entriesController.deleteEntrie);
+/**
+ * @route DELETE /api/v1/entries/:entryId
+ * @desc Exclui uma entrada pelo ID
+ * @access Privado
+ */
+router.delete('/entries/:entryId', auth, entryController.deleteEntry);
 
 module.exports = router;
