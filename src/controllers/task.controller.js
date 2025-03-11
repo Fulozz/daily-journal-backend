@@ -80,9 +80,19 @@ exports.updateTask = async (req, res) => {
 }
 
 exports.deleteTask = async (req, res) => {
+    const userId = req.userData._id;
+    if(!userId) {
+        return res.status(400).json({ message: 'User id is required!' });
+    }
     try {
-        const userId = req.userData._id;
         const taskId = req.params.taskId;
+
+        const missingFields = [];
+        if (!taskId) missingFields.push('TaskId');
+
+        if (missingFields.length > 0) {
+            return res.status(400).json({ message: `Missing fields: ${missingFields.join(', ')} ${taskId}` });
+        }
         const task = await Task.findOne({ _id: taskId, userId: userId });
         if (!task) {
                     return res.status(404).json({ message: 'Task not found!' });
@@ -99,13 +109,19 @@ exports.deleteTask = async (req, res) => {
 }
 
 exports.toggleTaskStatus = async (req, res) => {
+    const userId = req.userData._id;
+    if(!userId) {
+        return res.status(400).json({ message: 'User id is required!' });
+    }
     try {
-        // Obter o ID da tarefa dos parâmetros da URL
-        const { taskId } = req.params.taskId;
-        
-        // Obter o ID do usuário do token JWT (recomendado)
-        const userId = req.userData._id;
-        
+        const taskId = req.params.taskId;
+
+        const missingFields = [];
+        if (!taskId) missingFields.push('TaskId');
+
+        if (missingFields.length > 0) {
+            return res.status(400).json({ message: `Missing fields: ${missingFields.join(', ')} ${taskId}` });
+        }
         // Encontrar a tarefa
         const task = await Task.findOne({ _id: taskId, userId: userId });
         
