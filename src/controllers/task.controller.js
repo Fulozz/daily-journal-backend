@@ -104,7 +104,7 @@ exports.toggleTaskStatus = async (req, res) => {
         const { taskId } = req.params.taskId;
         
         // Obter o ID do usuário do token JWT (recomendado)
-        const userId = req.userData.userId;
+        const userId = req.userData._id;
         
         // Encontrar a tarefa
         const task = await Task.findOne({ _id: taskId, userId: userId });
