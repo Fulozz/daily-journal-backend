@@ -2,9 +2,12 @@ const Task = require('../models/task.model')
 
 
 exports.createTask = async (req, res) => {
+    const userId = req.userData._id;
+    if(!userId) {
+        return res.status(400).json({ message: 'User id is required!' });
+    }
     try {
         const { title, description, completed, dueDate } = req.body;
-        const userId = req.query.userId;
         const missingFields = [];
         if (!title) missingFields.push('Title');
         if (!description) missingFields.push('Description');
