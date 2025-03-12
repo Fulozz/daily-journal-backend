@@ -62,11 +62,12 @@ exports.updateTask = async (req, res) => {
     if(!userId) {
         return res.status(400).json({ message: 'User id is required' });
     }
-    const { title, description, taskId} = req.body;
+    const { title, description, taskId, dueDate} = req.body;
     const missingFields = [];
     if (!title) missingFields.push('Title');
     if (!description) missingFields.push('Description');
-    if (!taskId) missingFields.push('TaskId');  
+    if (!taskId) missingFields.push('TaskId');
+    if (!dueDate) missingFields.push('Due date');  
     if (missingFields.length > 0) {
         return res.status(400).json({ message: `Missing fields: ${missingFields.join(', ')}` });
     }
@@ -78,8 +79,7 @@ exports.updateTask = async (req, res) => {
         }
         task.title = title;
         task.description = description;
-        task.completed = completed;
-        task.data = data;
+        task.dueDate = dueDate;
         await task.save();
         res.status(200).json({ message: 'Task updated successfully!', task });
     } catch (error) {
