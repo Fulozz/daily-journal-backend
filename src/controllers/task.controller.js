@@ -62,12 +62,10 @@ exports.updateTask = async (req, res) => {
     if(!userId) {
         return res.status(400).json({ message: 'User id is required' });
     }
-    const { title, description, completed, data, taskId} = req.body;
-    console.log(data)
+    const { title, description, taskId} = req.body;
     const missingFields = [];
     if (!title) missingFields.push('Title');
     if (!description) missingFields.push('Description');
-    if (!completed) missingFields.push('Completed');
     if (!data) missingFields.push('Data');
     if (!taskId) missingFields.push('TaskId');  
     if (missingFields.length > 0) {
