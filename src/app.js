@@ -19,12 +19,10 @@ const entrieRoutes = require('./routes/entrie.routes')
 
 // => configuração do servidor
 const allowedOrigins = [
+  'http://localhost:3000',
   'https://personal-daily-journal.vercel.app',
 ];
 
-if (process.env.ENV === 'dev') {
-  allowedOrigins.push('http://localhost:3000');
-}
 app.use(cors({
   origin: function (origin, callback) {
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
