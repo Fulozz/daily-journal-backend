@@ -47,7 +47,7 @@ exports.returnTaskById = async (req, res) => {
     try {
         const userId = req.userData._id;
         const { taskId } = req.params;
-        const task = await Task.findOne({ _id: taskId, user: req.userData._id });
+        const task = await Task.findOne({ _id: taskId, user: userId });
         if (!task) {
             return res.status(404).json({ message: 'Task not found!' });
         }
