@@ -18,15 +18,28 @@ const entrieRoutes = require('./routes/entrie.routes')
 
 
 // => configuração do servidor
+const allowedOrigins = [
+  'https://personal-daily-journal.vercel.app',
+];
+
+if (process.env.ENV === 'dev') {
+  allowedOrigins.push('http://localhost:3000');
+}
+app.use(cors({
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.json({ type: 'application/vnd.api+json'}));
-app.use(cors({
-    origin: '*', // Add your frontend URLs
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: '*',
-  }));
 app.use(morgan('dev'));
 
 app.set("mongoose connection", mongooseConnection);
