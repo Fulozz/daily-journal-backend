@@ -41,7 +41,7 @@ exports.createEntry = async (req, res) => {
  */
 exports.returnAllEntries = async (req, res) => {
   try {
-    const userId = req.userData.userId;
+    const userId = req.userData._id;
     
     // Busca as entradas ordenadas por data de criação (mais recentes primeiro)
     const entries = await Entry.find({ userId }).sort({ createdAt: -1 });
@@ -60,7 +60,7 @@ exports.returnAllEntries = async (req, res) => {
 exports.returnEntryById = async (req, res) => {
   try {
     const { entryId } = req.params;
-    const userId = req.userData.userId;
+    const userId = req.userData._id;
 
     const entry = await Entry.findOne({ _id: entryId, userId });
 
@@ -82,7 +82,7 @@ exports.returnEntryById = async (req, res) => {
 exports.updateEntry = async (req, res) => {
   try {
     const { entryId } = req.params;
-    const userId = req.userData.userId;
+    const userId = req.userData._id;
     const { title, content } = req.body;
 
     // Validação básica
@@ -115,7 +115,7 @@ exports.updateEntry = async (req, res) => {
 exports.deleteEntry = async (req, res) => {
   try {
     const { entryId } = req.params;
-    const userId = req.userData.userId;
+    const userId = req.userData._id;
 
     const deletedEntry = await Entry.findOneAndDelete({ _id: entryId, userId });
 
