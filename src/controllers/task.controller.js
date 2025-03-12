@@ -75,7 +75,6 @@ exports.updateTask = async (req, res) => {
     }
 
     try {
-        const { title, description, completed, data, taskId} = req.body;
         const task = await Task.findOne({ _id: taskId, userId: userId });
         if (!task) {
             return res.status(404).json({ message: 'Task not found!' });
