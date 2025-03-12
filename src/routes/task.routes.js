@@ -18,7 +18,7 @@ router.get('/tasks/:taskId', auth, tasksController.returnTaskById);
 router.patch('/tasks/toggle/:taskId', auth, tasksController.toggleTaskStatus);
 
 // ==> Rota responsavel por atualizar uma 'Task' pelo 'Id': (PUT) localhost:3000/api/v1/tasks/:taskId
-router.put('/tasks/:taskId', auth, tasksController.updateTask);     
+router.put('/tasks/update', auth, tasksController.updateTask);     
 
 
 // ==> Rota responsavel por deletar uma 'Task' pelo 'Id': (DELETE) localhost:3000/api/v1/tasks/:taskId
