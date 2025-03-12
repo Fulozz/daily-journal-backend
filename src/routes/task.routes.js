@@ -14,8 +14,12 @@ router.get('/tasks', auth, tasksController.returnAllTasks);
 // ==> Rota responsavel por listar uma 'Task' pelo 'Id': (GET) localhost:3000/api/v1/tasks/:taskId
 router.get('/tasks/:taskId', auth, tasksController.returnTaskById);
 
-// ==> Rota responsavel por atualizar uma 'Task' pelo 'Id': (PUT) localhost:3000/api/v1/tasks/:taskId
+// ==> Rota responsavel por o estado de uma 'Task' pelo 'Id': (PUT) localhost:3000/api/v1/tasks/toggle/:taskId
 router.patch('/tasks/toggle/:taskId', auth, tasksController.toggleTaskStatus);
+
+// ==> Rota responsavel por atualizar uma 'Task' pelo 'Id': (PUT) localhost:3000/api/v1/tasks/:taskId
+router.put('/tasks/:taskId', auth, tasksController.updateTask);     
+
 
 // ==> Rota responsavel por deletar uma 'Task' pelo 'Id': (DELETE) localhost:3000/api/v1/tasks/:taskId
 router.delete('/tasks/:taskId', auth, tasksController.deleteTask);
