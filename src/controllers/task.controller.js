@@ -62,6 +62,18 @@ exports.updateTask = async (req, res) => {
     if(!userId) {
         return res.status(400).json({ message: 'User id is required' });
     }
+    const { title, description, completed, data, taskId} = req.body;
+    console.log(data)
+    const missingFields = [];
+    if (!title) missingFields.push('Title');
+    if (!description) missingFields.push('Description');
+    if (!completed) missingFields.push('Completed');
+    if (!data) missingFields.push('Data');
+    if (!taskId) missingFields.push('TaskId');  
+    if (missingFields.length > 0) {
+        return res.status(400).json({ message: `Missing fields: ${missingFields.join(', ')}` });
+    }
+
     try {
         const { title, description, completed, data, taskId} = req.body;
         const task = await Task.findOne({ _id: taskId, userId: userId });
