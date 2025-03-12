@@ -66,7 +66,6 @@ exports.updateTask = async (req, res) => {
     const missingFields = [];
     if (!title) missingFields.push('Title');
     if (!description) missingFields.push('Description');
-    if (!data) missingFields.push('Data');
     if (!taskId) missingFields.push('TaskId');  
     if (missingFields.length > 0) {
         return res.status(400).json({ message: `Missing fields: ${missingFields.join(', ')}` });
