@@ -6,10 +6,10 @@ const Entry = require('../models/entry.model');
  * @access Privado
  */
 exports.createEntry = async (req, res) => {
-  const userId = req.userData.userId;
+  const userId = req.userData._id;
   if(!userId) {
-    return res.status(401).json({ message: 'Usuário não autenticado' });
-  }
+    return res.status(400).json({ message: 'User id is required!' });
+}
 
   try {
 
