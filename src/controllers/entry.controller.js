@@ -6,12 +6,15 @@ const Entry = require('../models/entry.model');
  * @access Privado
  */
 exports.createEntry = async (req, res) => {
-  try {
-    const { title, content } = req.body;
-    const userId = req.userData.userId;
+  const userId = req.userData.userId;
+  if(!userId) {
+    return res.status(401).json({ message: 'Usuário não autenticado' });
+  }
 
-    // Validação básica
-    if (!title || !content) {
+  try {
+
+    const { title, content } = req.body;
+    if(!title || !content) {
       return res.status(400).json({ message: 'Título e conteúdo são obrigatórios' });
     }
 
